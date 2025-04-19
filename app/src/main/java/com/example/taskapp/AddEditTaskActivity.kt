@@ -1,13 +1,109 @@
 package com.example.taskapp
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.SeekBar
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.taskapp.databinding.ActivityAddEditTaskBinding
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
+@AndroidEntryPoint
 class AddEditTaskActivity : AppCompatActivity() {
+
+    private val viewModel: AddEditTaskViewModel by viewModels()
+    private lateinit var binding: ActivityAddEditTaskBinding
+
+    private val categoryList = listOf("Work", "Personal", "Shopping", "Health", "Study")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_edit_task)
+        binding = ActivityAddEditTaskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        // Setup category spinner
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categoryList
+        )
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCategory.adapter = spinnerAdapter
+
+        binding.seekBarPriority.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.textPriorityValue.text = "Priority: $progress"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Date Picker
+        binding.textViewPickDate.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val datePicker = DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    val date = "${dayOfMonth.toString().padStart(2, '0')}/${
+                        (month + 1).toString().padStart(2, '0')
+                    }/$year"
+                    binding.textViewPickDate.text = date
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePicker.show()
+        }
+
+        // Time Picker
+        binding.textViewPickTime.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val timePicker = TimePickerDialog(
+                this,
+                { _, hourOfDay, minute ->
+                    val hour = hourOfDay.toString().padStart(2, '0')
+                    val min = minute.toString().padStart(2, '0')
+                    val time = "$hour:$min"
+                    binding.textViewPickTime.text = time
+                },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true // 24-hour format
+            )
+            timePicker.show()
+        }
+
+
+        binding.buttonSave.setOnClickListener {
+            if (isValidInput()) {
+                viewModel.taskName.value = binding.editTextTaskName.text.toString()
+                viewModel.taskDescription.value = binding.editTextDescription.text.toString()
+                viewModel.taskDate.value = binding.textViewPickDate.text.toString()
+                viewModel.taskTime.value = binding.textViewPickTime.text.toString()
+
+                // ✅ Correct way to get Spinner and SeekBar values
+                viewModel.taskCategory.value = binding.spinnerCategory.selectedItem.toString()
+                viewModel.taskPriority.value = binding.seekBarPriority.progress
+
+                viewModel.insertTask()
+                Toast.makeText(this, "Task Saved", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun isValidInput(): Boolean {
+        return binding.editTextTaskName.text.isNotEmpty() &&
+                binding.textViewPickDate.text.isNotEmpty() &&
+                binding.textViewPickTime.text.isNotEmpty()
     }
 }

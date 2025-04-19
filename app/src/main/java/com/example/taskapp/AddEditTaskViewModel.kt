@@ -27,17 +27,20 @@ class AddEditTaskViewModel @Inject constructor(
     val taskTime = MutableLiveData("")
     val taskCategory = MutableLiveData("")
     val taskPriority = MutableLiveData(1)
+    var editingTaskId = MutableStateFlow(-1)
 
     fun insertTask() {
+        val task = Task(
+            id = editingTaskId.value.takeIf { it != -1 } ?: 0,
+            name = taskName.value.orEmpty(),
+            description = taskDescription.value.orEmpty(),
+            dueDate = taskDate.value.orEmpty(),
+            dueTime = taskTime.value.orEmpty(),
+            category = taskCategory.value.orEmpty(),
+            priority = taskPriority.value ?: 0
+        )
+
         viewModelScope.launch {
-            val task = Task(
-                name = taskName.value ?: "",
-                description = taskDescription.value ?: "",
-                dueDate = taskDate.value ?: "",
-                dueTime = taskTime.value ?: "",
-                category = taskCategory.value ?: "",
-                priority = taskPriority.value ?: 1
-            )
             repository.insertTask(task)
         }
     }
@@ -55,5 +58,6 @@ class AddEditTaskViewModel @Inject constructor(
             }
         }
     }
+
 
 }

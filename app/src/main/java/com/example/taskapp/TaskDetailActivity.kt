@@ -1,5 +1,6 @@
 package com.example.taskapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -39,5 +40,14 @@ class TaskDetailActivity : AppCompatActivity() {
         }
 
         viewModel.loadTaskById(taskId)
+
+        binding.buttonEdit.setOnClickListener {
+            val intent = Intent(this, AddEditTaskActivity::class.java).apply {
+                putExtra("isEdit", true)
+                putExtra("taskId", taskId)
+            }
+            startActivity(intent)
+            finish()
+        }
     }
 }

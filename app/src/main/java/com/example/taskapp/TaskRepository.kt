@@ -17,5 +17,7 @@ class TaskRepository @Inject constructor(
 
     suspend fun deleteTask(task: Task) = taskDao.deleteTask(task)
 
-    suspend fun getTaskById(id: Int): Task? = taskDao.getTaskById(id)
+    fun getTaskById(id: Int): Flow<Task?> {
+        return taskDao.getTaskById(id)
+    }
 }

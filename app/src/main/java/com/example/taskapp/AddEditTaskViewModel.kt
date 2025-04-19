@@ -1,6 +1,5 @@
 package com.example.taskapp
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +16,10 @@ class AddEditTaskViewModel @Inject constructor(
 
     private val _allTasks = MutableStateFlow<List<Task>>(emptyList())
     val allTasks: StateFlow<List<Task>> = _allTasks
+
+    private val _task = MutableStateFlow<Task?>(null)
+    val task: StateFlow<Task?> = _task
+
 
     val taskName = MutableLiveData("")
     val taskDescription = MutableLiveData("")
@@ -42,6 +45,14 @@ class AddEditTaskViewModel @Inject constructor(
     fun loadAllTasks() {
         viewModelScope.launch {
             _allTasks.value = repository.getAllTasks()
+        }
+    }
+
+    fun loadTaskById(id: Int) {
+        viewModelScope.launch {
+            repository.getTaskById(id).collect { taskEntity ->
+                _task.value = taskEntity
+            }
         }
     }
 

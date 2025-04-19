@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnTaskClickListener {
 
     private val viewModel: AddEditTaskViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = TaskAdapter(emptyList())
+        adapter = TaskAdapter(emptyList(), this)
         binding.recyclerViewTasks.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewTasks.adapter = adapter
 
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         // Collect tasks using Coroutine
         lifecycleScope.launch {
             viewModel.allTasks.collect { tasks ->
-                adapter = TaskAdapter(tasks)
+                adapter = TaskAdapter(tasks, this@MainActivity)
                 binding.recyclerViewTasks.adapter = adapter
             }
         }
@@ -50,5 +50,11 @@ class MainActivity : AppCompatActivity() {
             addTaskLauncher.launch(intent)
         }
 
+    }
+
+    override fun onTaskClick(taskId: Int) {
+        val intent = Intent(this, TaskDetailActivity::class.java)
+        intent.putExtra("taskId", taskId)
+        startActivity(intent)
     }
 }

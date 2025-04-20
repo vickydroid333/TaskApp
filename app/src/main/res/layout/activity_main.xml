@@ -21,27 +21,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Search Input -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchInputLayout"
+    <EditText
+        android:id="@+id/editTextSearch"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/bg_search_rounded"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:hint="Search tasks..."
+        android:padding="12dp"
+        android:drawableTint="#AAAAAA"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#AAAAAA"
+        app:layout_constraintBottom_toTopOf="@id/spinnerTaskFilterCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/homeScreenTitle">
+        app:layout_constraintTop_toBottomOf="@id/homeScreenTitle" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search tasks..."
-            android:padding="12dp"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Task Filter Dropdown with Border -->
     <androidx.cardview.widget.CardView
         android:id="@+id/spinnerTaskFilterCard"
         android:layout_width="wrap_content"
@@ -51,7 +48,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInputLayout">
+        app:layout_constraintTop_toBottomOf="@id/editTextSearch">
 
         <Spinner
             android:id="@+id/spinnerTaskFilter"
@@ -60,7 +57,6 @@
             android:padding="8dp" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Task List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="0dp"
@@ -71,7 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinnerTaskFilterCard" />
 
-    <!-- Status Filter Dropdown with Border -->
     <androidx.cardview.widget.CardView
         android:id="@+id/spinnerStatusFilterCard"
         android:layout_width="wrap_content"
@@ -90,7 +85,6 @@
             android:padding="8dp" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Completed & Deleted Task List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCompletedDeleted"
         android:layout_width="0dp"
@@ -101,7 +95,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinnerStatusFilterCard" />
 
-    <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddTask"
         android:layout_width="wrap_content"

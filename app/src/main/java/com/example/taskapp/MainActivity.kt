@@ -113,12 +113,11 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     private fun showOnlyDeletedTasksAndResetUI() {
         val deletedTasks = originalTaskList.filter { it.isDeleted }
         completedDeletedAdapter.updateTasks(deletedTasks)
-        // Force show only deleted and hide all other views
         binding.spinnerTaskFilter.setSelection(0)
-        binding.spinnerStatusFilter.setSelection(1) // Deleted Tasks
+        binding.spinnerStatusFilter.setSelection(1)
         binding.editTextSearch.setText("")
 
-        taskAdapter.updateTasks(emptyList()) // ⛔ Clear main adapter
+        taskAdapter.updateTasks(emptyList())
         completedDeletedAdapter.updateTasks(deletedTasks)
     }
 
@@ -163,30 +162,59 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         val statusFilter = binding.spinnerStatusFilter.selectedItem.toString()
         val todayDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
-        val filteredMain = originalTaskList.filter { task ->
-            val matchesSearch =
-                task.name.contains(query, true) || task.description.contains(query, true)
-            val matchesDate = when (taskFilter) {
-                "Today Tasks" -> task.dueDate == todayDate
-                else -> true
+        val currentTimeMillis = System.currentTimeMillis()
+        val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+
+        val updatedTasks = mutableListOf<Task>()
+
+        originalTaskList.forEach { task ->
+            if (!task.isCompleted && !task.isDeleted) {
+                val fullDue = "${task.dueDate} ${task.dueTime}"
+                try {
+                    val dueMillis = dateTimeFormat.parse(fullDue)?.time
+                    if (dueMillis != null && dueMillis < currentTimeMillis) {
+                        val updatedTask = task.copy(isCompleted = true)
+                        updatedTasks.add(updatedTask)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
-            val isActive = !task.isCompleted && !task.isDeleted
-            matchesSearch && matchesDate && isActive
         }
 
-        val filteredSecondary = originalTaskList.filter { task ->
-            val matchesSearch =
-                task.name.contains(query, true) || task.description.contains(query, true)
-            val matchesStatus = when (statusFilter) {
-                "Completed Tasks" -> task.isCompleted && !task.isDeleted  // ✅ EXCLUDE deleted
-                "Deleted Tasks" -> task.isDeleted
-                else -> false
-            }
-            matchesSearch && matchesStatus
+        if (updatedTasks.isNotEmpty()) {
+            updatedTasks.forEach { viewModel.updateTask(it) }
+
+            viewModel.loadAllTasks()
+            return
         }
 
-        taskAdapter.updateTasks(filteredMain)
-        completedDeletedAdapter.updateTasks(filteredSecondary)
+        lifecycleScope.launchWhenStarted {
+            val filteredMain = originalTaskList.filter { task ->
+                val matchesSearch =
+                    task.name.contains(query, true) || task.description.contains(query, true)
+                val matchesDate = when (taskFilter) {
+                    "Today Tasks" -> task.dueDate == todayDate
+                    else -> true
+                }
+                val isActive = !task.isCompleted && !task.isDeleted
+                matchesSearch && matchesDate && isActive
+            }
+
+            val filteredSecondary = originalTaskList.filter { task ->
+                val matchesSearch =
+                    task.name.contains(query, true) || task.description.contains(query, true)
+                val matchesStatus = when (statusFilter) {
+                    "Completed Tasks" -> task.isCompleted && !task.isDeleted
+                    "Deleted Tasks" -> task.isDeleted
+                    else -> false
+                }
+                matchesSearch && matchesStatus
+            }
+
+            taskAdapter.updateTasks(filteredMain)
+            completedDeletedAdapter.updateTasks(filteredSecondary)
+        }
     }
 
 }

@@ -228,12 +228,10 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
                 binding.layoutEmptyState.visibility = View.VISIBLE
                 binding.spinnerTaskFilterCard.visibility = View.GONE
                 binding.spinnerStatusFilterCard.visibility = View.GONE
-                binding.editTextSearch.visibility = View.GONE
             } else {
                 binding.layoutEmptyState.visibility = View.GONE
                 binding.spinnerTaskFilterCard.visibility = View.VISIBLE
                 binding.spinnerStatusFilterCard.visibility = View.VISIBLE
-                binding.editTextSearch.visibility = View.VISIBLE
             }
 
         }

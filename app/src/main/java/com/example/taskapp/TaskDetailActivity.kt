@@ -1,5 +1,6 @@
 package com.example.taskapp
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -14,6 +15,8 @@ class TaskDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTaskDetailsBinding
     private val viewModel: AddEditTaskViewModel by viewModels()
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskDetailsBinding.inflate(layoutInflater)

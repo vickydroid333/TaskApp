@@ -9,19 +9,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), OnTaskClickListener {
 
-    private val viewModel: AddEditTaskViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: AddEditTaskViewModel by viewModels()
     private lateinit var adapter: TaskAdapter
 
-    private val addTaskLauncher = registerForActivityResult(
+    private val addEditTaskLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        // Reload tasks when returning from AddEditTaskActivity
         viewModel.loadAllTasks()
     }
 
@@ -30,31 +29,33 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = TaskAdapter(emptyList(), this)
-        binding.recyclerViewTasks.layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewTasks.adapter = adapter
+        setupRecyclerView()
 
-        // Load tasks initially
-        viewModel.loadAllTasks()
-
-        // Collect tasks using Coroutine
-        lifecycleScope.launch {
-            viewModel.allTasks.collect { tasks ->
-                adapter = TaskAdapter(tasks, this@MainActivity)
-                binding.recyclerViewTasks.adapter = adapter
+        lifecycleScope.launchWhenStarted {
+            viewModel.allTasks.collectLatest { tasks ->
+                adapter.updateTasks(tasks)
             }
         }
 
+        viewModel.loadAllTasks()
+
         binding.fabAddTask.setOnClickListener {
             val intent = Intent(this, AddEditTaskActivity::class.java)
-            addTaskLauncher.launch(intent)
+            addEditTaskLauncher.launch(intent)
         }
+    }
 
+    private fun setupRecyclerView() {
+        adapter = TaskAdapter(emptyList(), this)
+        binding.recyclerViewTasks.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewTasks.adapter = adapter
     }
 
     override fun onTaskClick(taskId: Int) {
-        val intent = Intent(this, TaskDetailActivity::class.java)
-        intent.putExtra("taskId", taskId)
-        startActivity(intent)
+        val intent = Intent(this, TaskDetailActivity::class.java).apply {
+            putExtra("taskId", taskId)
+            putExtra("isEdit", true)
+        }
+        addEditTaskLauncher.launch(intent)
     }
 }

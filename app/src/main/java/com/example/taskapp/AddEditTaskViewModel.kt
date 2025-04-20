@@ -29,7 +29,7 @@ class AddEditTaskViewModel @Inject constructor(
     val taskPriority = MutableLiveData(1)
     var editingTaskId = MutableStateFlow(-1)
 
-    fun insertTask() {
+    fun insertTask(onComplete: (() -> Unit)? = null) {
         val task = Task(
             id = editingTaskId.value.takeIf { it != -1 } ?: 0,
             name = taskName.value.orEmpty(),
@@ -42,6 +42,8 @@ class AddEditTaskViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.insertTask(task)
+            loadAllTasks()
+            onComplete?.invoke()
         }
     }
 

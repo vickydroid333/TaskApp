@@ -1,33 +1,44 @@
 package com.example.taskapp
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskapp.databinding.ItemTaskBinding
 
-class TaskAdapter(private val tasks: List<Task>, private val listener: OnTaskClickListener) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(
+    private var taskList: List<Task>,
+    private val listener: OnTaskClickListener
+) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    class TaskViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class TaskViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = tasks[position]
-        holder.binding.textViewTaskName.text = task.name
-        holder.binding.textViewDueDate.text = "${task.dueDate} ${task.dueTime}"
-        holder.binding.textViewPriority.text = "Priority: ${task.priority}"
+        val task = taskList[position]
+        holder.binding.apply {
+            textViewTaskName.text = task.name
+            textViewDueDate.text = "Due Date: ${task.dueDate} ${task.dueTime}"
+            textViewPriority.text = "Priority: ${task.priority}"
 
-        // On item click
-        holder.binding.root.setOnClickListener {
-            listener.onTaskClick(task.id)
+            root.setOnClickListener {
+                listener.onTaskClick(task.id)
+            }
         }
     }
 
-    override fun getItemCount() = tasks.size
+    override fun getItemCount(): Int = taskList.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateTasks(newTasks: List<Task>) {
+        this.taskList = newTasks
+        notifyDataSetChanged()
+    }
 }
 
 interface OnTaskClickListener {

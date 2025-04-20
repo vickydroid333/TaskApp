@@ -1,4 +1,4 @@
-package com.example.taskapp
+package com.example.taskapp.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.taskapp.databinding.ActivityAddEditTaskBinding
+import com.example.taskapp.ui.viewmodel.AddEditTaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -137,8 +138,8 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun setupCategorySpinner() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categoryList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categoryList)
+        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
     }
 

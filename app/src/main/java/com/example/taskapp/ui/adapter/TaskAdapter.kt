@@ -1,4 +1,4 @@
-package com.example.taskapp
+package com.example.taskapp.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taskapp.data.model.Task
 import com.example.taskapp.databinding.ItemTaskBinding
 
 class TaskAdapter(
@@ -26,7 +27,7 @@ class TaskAdapter(
 
         val colorStateList = ColorStateList(
             arrayOf(
-                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(com.google.android.material.R.attr.checkedState),
                 intArrayOf()
             ),
             intArrayOf(Color.WHITE, Color.GRAY)

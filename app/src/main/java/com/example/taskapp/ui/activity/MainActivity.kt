@@ -1,17 +1,25 @@
-package com.example.taskapp
+package com.example.taskapp.ui.activity
 
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.taskapp.R
+import com.example.taskapp.data.model.Task
 import com.example.taskapp.databinding.ActivityMainBinding
+import com.example.taskapp.ui.adapter.OnTaskClickListener
+import com.example.taskapp.ui.adapter.TaskAdapter
+import com.example.taskapp.ui.viewmodel.AddEditTaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Date
@@ -84,7 +92,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onTaskCompleteConfirm(task: Task) {
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setTitle("Complete Task")
             .setMessage("Are you sure you want to mark '${task.name}' as completed?")
             .setPositiveButton("Yes") { _, _ ->
@@ -98,7 +106,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onTaskIncompleteConfirm(task: Task) {
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
+        val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setTitle("Mark as Incomplete")
             .setMessage("Are you sure you want to mark '${task.name}' as incomplete?")
             .setPositiveButton("Yes") { _, _ ->
@@ -146,13 +154,13 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     private fun setupSearch() {
-        binding.editTextSearch.addTextChangedListener(object : android.text.TextWatcher {
+        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filterTasks()
             }
 
-            override fun afterTextChanged(s: android.text.Editable?) {}
+            override fun afterTextChanged(s: Editable?) {}
         })
     }
 
@@ -214,6 +222,20 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
 
             taskAdapter.updateTasks(filteredMain)
             completedDeletedAdapter.updateTasks(filteredSecondary)
+
+            val isAllEmpty = filteredMain.isEmpty() && filteredSecondary.isEmpty()
+            if (isAllEmpty) {
+                binding.layoutEmptyState.visibility = View.VISIBLE
+                binding.spinnerTaskFilterCard.visibility = View.GONE
+                binding.spinnerStatusFilterCard.visibility = View.GONE
+                binding.editTextSearch.visibility = View.GONE
+            } else {
+                binding.layoutEmptyState.visibility = View.GONE
+                binding.spinnerTaskFilterCard.visibility = View.VISIBLE
+                binding.spinnerStatusFilterCard.visibility = View.VISIBLE
+                binding.editTextSearch.visibility = View.VISIBLE
+            }
+
         }
     }
 

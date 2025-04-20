@@ -1,7 +1,10 @@
-package com.example.taskapp
+package com.example.taskapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.taskapp.data.local.TaskDao
+import com.example.taskapp.data.local.TaskDatabase
+import com.example.taskapp.data.repository.TaskRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

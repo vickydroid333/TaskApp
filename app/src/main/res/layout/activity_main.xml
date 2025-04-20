@@ -7,7 +7,43 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".ui.activity.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutEmptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/empty_list_png" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="What do you want to do today?"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="Tap + to add your tasks"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/homeScreenTitle"
@@ -29,9 +65,9 @@
         android:background="@drawable/bg_search_rounded"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="10dp"
+        android:drawableTint="#AAAAAA"
         android:hint="Search tasks..."
         android:padding="12dp"
-        android:drawableTint="#AAAAAA"
         android:textColor="#FFFFFF"
         android:textColorHint="#AAAAAA"
         app:layout_constraintBottom_toTopOf="@id/spinnerTaskFilterCard"

@@ -1,8 +1,10 @@
-package com.example.taskapp
+package com.example.taskapp.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.taskapp.data.model.Task
+import com.example.taskapp.data.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -68,12 +70,4 @@ class AddEditTaskViewModel @Inject constructor(
             onComplete?.invoke()
         }
     }
-
-    fun deleteTask(task: Task) {
-        viewModelScope.launch {
-            repository.deleteTask(task)
-            loadAllTasks()
-        }
-    }
-
 }

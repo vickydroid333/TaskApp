@@ -1,4 +1,4 @@
-package com.example.taskapp
+package com.example.taskapp.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.taskapp.ui.viewmodel.AddEditTaskViewModel
+import com.example.taskapp.R
 import com.example.taskapp.databinding.ActivityTaskDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 

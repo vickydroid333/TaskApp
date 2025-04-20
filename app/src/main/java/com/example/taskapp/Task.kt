@@ -12,5 +12,6 @@ data class Task(
     val dueTime: String,
     val category: String,
     val priority: Int,
-    val isCompleted: Boolean = false
+    val isCompleted: Boolean = false,
+    val isDeleted: Boolean = false
 )

@@ -61,8 +61,15 @@ class TaskDetailActivity : AppCompatActivity() {
                 .setMessage("Are you sure you want to delete this task?")
                 .setPositiveButton("Delete") { _, _ ->
                     if (currentTask != null) {
-                        viewModel.deleteTask(currentTask)
-                        Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
+                        val deletedTask = currentTask.copy(isDeleted = true)
+                        viewModel.updateTask(deletedTask)
+
+                        val resultIntent = Intent().apply {
+                            putExtra("showOnlyDeleted", true)
+                        }
+                        setResult(RESULT_OK, resultIntent)
+
+                        Toast.makeText(this, "Task moved to Deleted", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         Toast.makeText(

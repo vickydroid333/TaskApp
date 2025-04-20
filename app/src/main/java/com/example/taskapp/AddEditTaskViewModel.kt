@@ -61,6 +61,14 @@ class AddEditTaskViewModel @Inject constructor(
         }
     }
 
+    fun updateTask(task: Task, onComplete: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            repository.updateTask(task)
+            loadAllTasks()
+            onComplete?.invoke()
+        }
+    }
+
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             repository.deleteTask(task)

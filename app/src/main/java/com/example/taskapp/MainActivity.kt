@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Date
 import java.util.Locale
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onTaskCompleteConfirm(task: Task) {
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setTitle("Complete Task")
             .setMessage("Are you sure you want to mark '${task.name}' as completed?")
             .setPositiveButton("Yes") { _, _ ->
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     override fun onTaskIncompleteConfirm(task: Task) {
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setTitle("Mark as Incomplete")
             .setMessage("Are you sure you want to mark '${task.name}' as incomplete?")
             .setPositiveButton("Yes") { _, _ ->
@@ -127,11 +126,19 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         val taskFilterItems = listOf("All Tasks", "Today Tasks")
         val statusFilterItems = listOf("Completed Tasks", "Deleted Tasks")
 
-        binding.spinnerTaskFilter.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, taskFilterItems)
-        binding.spinnerStatusFilter.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, statusFilterItems)
+        binding.spinnerTaskFilter.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, taskFilterItems)
+        binding.spinnerStatusFilter.adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, statusFilterItems)
 
         val listener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) = filterTasks()
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) = filterTasks()
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -145,6 +152,7 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filterTasks()
             }
+
             override fun afterTextChanged(s: android.text.Editable?) {}
         })
     }
@@ -156,7 +164,8 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         val todayDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         val filteredMain = originalTaskList.filter { task ->
-            val matchesSearch = task.name.contains(query, true) || task.description.contains(query, true)
+            val matchesSearch =
+                task.name.contains(query, true) || task.description.contains(query, true)
             val matchesDate = when (taskFilter) {
                 "Today Tasks" -> task.dueDate == todayDate
                 else -> true
@@ -166,7 +175,8 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         }
 
         val filteredSecondary = originalTaskList.filter { task ->
-            val matchesSearch = task.name.contains(query, true) || task.description.contains(query, true)
+            val matchesSearch =
+                task.name.contains(query, true) || task.description.contains(query, true)
             val matchesStatus = when (statusFilter) {
                 "Completed Tasks" -> task.isCompleted && !task.isDeleted  // ✅ EXCLUDE deleted
                 "Deleted Tasks" -> task.isDeleted

@@ -1,6 +1,8 @@
 package com.example.taskapp
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +23,19 @@ class TaskAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = taskList[position]
+
+        val colorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf()
+            ),
+            intArrayOf(Color.WHITE, Color.GRAY)
+        )
+        holder.binding.radioCompleteTask.buttonTintList = colorStateList
+        holder.binding.radioCompleteTask.setOnCheckedChangeListener { _, isChecked ->
+            holder.binding.radioCompleteTask.setTextColor(if (isChecked) Color.BLUE else Color.GRAY)
+        }
+
         holder.binding.apply {
             textViewTaskName.text = task.name
             textViewDueDate.text = "Due Date: ${task.dueDate} ${task.dueTime}"
@@ -56,6 +71,6 @@ class TaskAdapter(
 interface OnTaskClickListener {
     fun onTaskClick(taskId: Int)
     fun onTaskCompleteConfirm(task: Task)
-    fun onTaskIncompleteConfirm(task: Task) // ✅ Add this
+    fun onTaskIncompleteConfirm(task: Task)
 
 }

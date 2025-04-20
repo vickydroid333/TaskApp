@@ -3,6 +3,7 @@ package com.example.taskapp
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
@@ -108,21 +109,30 @@ class AddEditTaskActivity : AppCompatActivity() {
                 c.get(Calendar.DAY_OF_MONTH)
             )
 
-            // Disable past dates by setting the minimum date to today
             datePickerDialog.datePicker.minDate = c.timeInMillis
-
+            datePickerDialog.setOnShowListener {
+                datePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE)
+                    .setTextColor(Color.GREEN)
+                datePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            }
             datePickerDialog.show()
         }
 
         binding.textViewPickTime.setOnClickListener {
             val c = Calendar.getInstance()
-            TimePickerDialog(
+            val timePickerDialog = TimePickerDialog(
                 this,
                 { _, h, m ->
                     binding.textViewPickTime.text = "${"%02d".format(h)}:${"%02d".format(m)}"
                 },
                 c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true
-            ).show()
+            )
+            timePickerDialog.setOnShowListener {
+                timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE)
+                    .setTextColor(Color.GREEN)
+                timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            }
+            timePickerDialog.show()
         }
     }
 
@@ -134,8 +144,10 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     private fun isValid(): Boolean {
         return binding.editTextTaskName.text.isNotBlank()
+                && binding.editTextDescription.text.isNotBlank()
                 && binding.textViewPickDate.text.isNotBlank()
                 && binding.textViewPickTime.text.isNotBlank()
+                && binding.spinnerCategory.selectedItem.toString().isNotBlank()
     }
 
     private fun updateViewModelValues() {

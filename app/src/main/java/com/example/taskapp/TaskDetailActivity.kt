@@ -56,7 +56,7 @@ class TaskDetailActivity : AppCompatActivity() {
 
         binding.buttonDelete.setOnClickListener {
             val currentTask = viewModel.task.value
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this, R.style.CustomDialogTheme)
                 .setTitle("Delete Task")
                 .setMessage("Are you sure you want to delete this task?")
                 .setPositiveButton("Delete") { _, _ ->

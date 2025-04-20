@@ -5,72 +5,96 @@
     android:id="@+id/homeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/homeScreenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Index"
+        android:textStyle="bold"
+        android:textSize="22sp"/>
 
     <!-- Search Input -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/homeScreenTitle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search by name or description" />
+            android:hint="Search tasks..."
+            android:padding="12dp"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Spinner 1 -->
-    <Spinner
-        android:id="@+id/spinnerTaskFilter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/searchInputLayout"
+    <!-- Task Filter Dropdown with Border -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spinnerTaskFilterCard"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/searchInputLayout">
 
-    <!-- RecyclerView 1 -->
+        <Spinner
+            android:id="@+id/spinnerTaskFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Task List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintTop_toBottomOf="@id/spinnerTaskFilter"
-        app:layout_constraintBottom_toTopOf="@id/spinnerStatusFilter"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/spinnerStatusFilterCard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.35" />
-
-    <!-- Spinner 2 -->
-    <Spinner
-        android:id="@+id/spinnerStatusFilter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginHorizontal="12dp"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewTasks"
+        app:layout_constraintHeight_percent="0.32"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerTaskFilterCard" />
 
-    <!-- RecyclerView 2 -->
+    <!-- Status Filter Dropdown with Border -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spinnerStatusFilterCard"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewTasks">
+
+        <Spinner
+            android:id="@+id/spinnerStatusFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- Completed & Deleted Task List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCompletedDeleted"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintTop_toBottomOf="@id/spinnerStatusFilter"
-        app:layout_constraintBottom_toTopOf="@id/fabAddTask"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.35" />
+        app:layout_constraintHeight_percent="0.32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinnerStatusFilterCard" />
 
     <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

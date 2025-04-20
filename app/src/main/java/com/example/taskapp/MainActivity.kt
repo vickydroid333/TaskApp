@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
     }
 
     private fun setupRecyclerView() {
-        taskAdapter = TaskAdapter(emptyList(), this, showRadioButton = true)
-        completedDeletedAdapter = TaskAdapter(emptyList(), this, showRadioButton = false)
+        taskAdapter = TaskAdapter(emptyList(), this)
+        completedDeletedAdapter = TaskAdapter(emptyList(), this)
 
         binding.recyclerViewTasks.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewTasks.adapter = taskAdapter

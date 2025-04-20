@@ -2,7 +2,6 @@ package com.example.taskapp
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskapp.databinding.ItemTaskBinding
@@ -10,7 +9,6 @@ import com.example.taskapp.databinding.ItemTaskBinding
 class TaskAdapter(
     private var taskList: List<Task>,
     private val listener: OnTaskClickListener,
-    private val showRadioButton: Boolean
 ) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
@@ -32,18 +30,15 @@ class TaskAdapter(
                 listener.onTaskClick(task.id)
             }
 
-            radioCompleteTask.isChecked = task.isCompleted // ✅ Set checked state based on task
+            radioCompleteTask.isChecked = task.isCompleted
 
-            // ✅ OnClick: Mark complete or incomplete with confirmation
             radioCompleteTask.setOnClickListener {
                 if (task.isCompleted) {
-                    // Already completed → trying to uncheck
                     listener.onTaskIncompleteConfirm(task)
-                    radioCompleteTask.isChecked = true // prevent uncheck unless confirmed
+                    radioCompleteTask.isChecked = true
                 } else {
-                    // Mark as complete
                     listener.onTaskCompleteConfirm(task)
-                    radioCompleteTask.isChecked = false // prevent auto-check unless confirmed
+                    radioCompleteTask.isChecked = false
                 }
             }
         }

@@ -97,13 +97,21 @@ class AddEditTaskActivity : AppCompatActivity() {
 
         binding.textViewPickDate.setOnClickListener {
             val c = Calendar.getInstance()
-            DatePickerDialog(
+
+            val datePickerDialog = DatePickerDialog(
                 this,
                 { _, y, m, d ->
                     binding.textViewPickDate.text = "${"%02d".format(d)}/${"%02d".format(m + 1)}/$y"
                 },
-                c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)
-            ).show()
+                c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH),
+                c.get(Calendar.DAY_OF_MONTH)
+            )
+
+            // Disable past dates by setting the minimum date to today
+            datePickerDialog.datePicker.minDate = c.timeInMillis
+
+            datePickerDialog.show()
         }
 
         binding.textViewPickTime.setOnClickListener {

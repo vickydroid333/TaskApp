@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.taskapp.databinding.ActivityTaskDetailsBinding
@@ -51,6 +52,29 @@ class TaskDetailActivity : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
+        }
+
+        binding.buttonDelete.setOnClickListener {
+            val currentTask = viewModel.task.value
+            AlertDialog.Builder(this)
+                .setTitle("Delete Task")
+                .setMessage("Are you sure you want to delete this task?")
+                .setPositiveButton("Delete") { _, _ ->
+                    if (currentTask != null) {
+                        viewModel.deleteTask(currentTask)
+                        Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Unable to delete. Task not loaded.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+
         }
     }
 }

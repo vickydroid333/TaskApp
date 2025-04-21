@@ -78,8 +78,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/spinnerTaskFilterCard"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
         app:cardBackgroundColor="#1E1E1E"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
@@ -90,7 +90,7 @@
             android:id="@+id/spinnerTaskFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="9dp" />
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -106,7 +106,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/spinnerStatusFilterCard"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         app:cardBackgroundColor="#1E1E1E"
         app:cardCornerRadius="8dp"
@@ -118,7 +118,7 @@
             android:id="@+id/spinnerStatusFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp" />
+            android:padding="9dp" />
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView

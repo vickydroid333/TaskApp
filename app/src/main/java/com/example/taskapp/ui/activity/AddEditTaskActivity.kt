@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.taskapp.R
 import com.example.taskapp.databinding.ActivityAddEditTaskBinding
 import com.example.taskapp.ui.viewmodel.AddEditTaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -138,7 +139,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun setupCategorySpinner() {
-        val adapter = ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, categoryList)
+        val adapter = ArrayAdapter(this, R.layout.spinner_item, categoryList)
         adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
     }

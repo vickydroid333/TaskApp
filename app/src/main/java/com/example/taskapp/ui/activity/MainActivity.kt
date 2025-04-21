@@ -133,10 +133,13 @@ class MainActivity : AppCompatActivity(), OnTaskClickListener {
         val taskFilterItems = listOf("All Tasks", "Today Tasks")
         val statusFilterItems = listOf("Completed Tasks", "Deleted Tasks")
 
-        binding.spinnerTaskFilter.adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, taskFilterItems)
-        binding.spinnerStatusFilter.adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, statusFilterItems)
+        val adapter = ArrayAdapter(this, R.layout.spinner_item, taskFilterItems)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTaskFilter.adapter = adapter
+
+        val adapter1 = ArrayAdapter(this, R.layout.spinner_item, statusFilterItems)
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerStatusFilter.adapter = adapter1
 
         val listener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

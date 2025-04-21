@@ -53,6 +53,7 @@
             android:focusable="true"
             android:hint="Select Date"
             android:padding="12dp"
+            android:textColor="@color/white"
             android:textColorHint="#FFFFFF"
             android:textSize="16sp" />
 
@@ -60,8 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Due Time"
             android:paddingTop="8dp"
+            android:text="Due Time"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
 
@@ -72,8 +73,9 @@
             android:background="#292929"
             android:clickable="true"
             android:focusable="true"
-            android:padding="12dp"
             android:hint="Select Time"
+            android:padding="12dp"
+            android:textColor="@color/white"
             android:textColorHint="#FFFFFF"
             android:textSize="16sp" />
 
@@ -97,7 +99,7 @@
                 android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp" />
+                android:padding="9dp" />
         </androidx.cardview.widget.CardView>
 
         <TextView
